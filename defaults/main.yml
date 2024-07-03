@@ -1,0 +1,3 @@
+---
+mongo_major_release: 7.0
+mongo_minor_release: '*' # * == latest version from mongo_major_release

@@ -1,0 +1,10 @@
+---
+galaxy_info:
+  role_name: mongodb_install
+  namespace: mongodb
+  author: Anatoly Kuznetsov
+  description: Install MongoDB
+  license: CC0
+  min_ansible_version: 2.17
+  platforms:
+  galaxy_tags: []

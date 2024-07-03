@@ -1,0 +1,37 @@
+---
+- name: Install gnupg and its required libraries
+  apt:
+    name: gnupg
+    update_cache: yes
+
+- name: Add repo key
+  ansible.builtin.apt_key:
+    url: https://www.mongodb.org/static/pgp/server-{{ mongo_major_release }}.asc
+
+- name: Add repo file mongodb-org-{{ mongo_major_release }}
+  ansible.builtin.apt_repository:
+    repo: deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/{{ mongo_major_release }} multiverse
+    filename: mongodb-org-{{ mongo_major_release }}
+
+- name: Remove mongodb* from apt holded packages
+  command: apt-mark unhold mongodb*
+  changed_when: false
+
+- name: Install mongodb {{ mongo_major_release }}.{{ mongo_minor_release }}
+  apt:
+    name:
+      - mongodb-org={{ mongo_major_release }}.{{ mongo_minor_release }}
+      - mongodb-org-server={{ mongo_major_release }}.{{ mongo_minor_release }}
+      - mongodb-org-mongos={{ mongo_major_release }}.{{ mongo_minor_release }}
+      - mongodb-org-tools={{ mongo_major_release }}.{{ mongo_minor_release }}
+    update_cache: yes
+
+- name: Install latest mongodb-mongosh
+  apt:
+    name:
+      - mongodb-mongosh
+    state: latest
+
+- name: Add mongodb* to apt holded packages
+  command: apt-mark hold mongodb*
+  changed_when: false

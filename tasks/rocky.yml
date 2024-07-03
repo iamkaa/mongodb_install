@@ -1,0 +1,34 @@
+---
+- name: Add repo for {{ mongo_major_release }} version
+  template:
+    src: etc/yum.repos.d/mongodb-org.repo.j2
+    dest: /etc/yum.repos.d/mongodb-org-{{ mongo_major_release }}.repo
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install python3-dnf-plugin-versionlock
+  dnf:
+    name: python3-dnf-plugin-versionlock
+
+- name: Remove mongodb* from versionlock list
+  ansible.builtin.command: dnf versionlock delete mongodb*
+  changed_when: false
+
+- name: Install mongodb
+  dnf:
+    name:
+      - mongodb-org-{{ mongo_major_release }}.{{ mongo_minor_release }}
+      - mongodb-org-server-{{ mongo_major_release }}.{{ mongo_minor_release }}
+      - mongodb-org-mongos-{{ mongo_major_release }}.{{ mongo_minor_release }}
+      - mongodb-org-tools-{{ mongo_major_release }}.{{ mongo_minor_release }}
+
+- name: Install latest version mongodb-mongosh
+  dnf:
+    name:
+      - mongodb-mongosh
+    state: latest
+
+- name: Add mongodb* to versionlock list
+  command: dnf versionlock add mongodb*
+  changed_when: false

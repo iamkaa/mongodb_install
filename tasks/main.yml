@@ -1,0 +1,17 @@
+---
+- name: Installing pip
+  ansible.builtin.package:
+    name: python3-pip
+
+- name: Installing python pymongo
+  pip:
+    name: pymongo>4
+
+# Distributive specific actions
+- include_tasks: '{{ ansible_distribution | lower }}.yml'
+
+- name: Enable and run service mongod
+  service:
+    name: mongod
+    enabled: true
+    state: started
