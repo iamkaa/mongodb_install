@@ -2,6 +2,12 @@
 
 Ansible role just for installing MongoDB.
 
+## Features
+
+Installed packages mongodb* are holded/versionlocked. You can install OS updates without worry about MongoDB version.
+
+For updating MongoDB version you should play role with acceptable variables.
+
 ## vars:
 * mongo_major_release: - major release, defailt is '7.0'.
 * mongo_minor_release: - rapid release, default is '*' meaning latest version.
